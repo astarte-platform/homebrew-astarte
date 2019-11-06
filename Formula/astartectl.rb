@@ -9,6 +9,16 @@ class Astartectl < Formula
   def install
     system "go", "build"
     bin.install "astartectl" => "astartectl"
+
+    # Install bash completion
+    output = Utils.popen_read("#{bin}/astartectl completion bash")
+    (bash_completion/"astartectl").write output
+
+    # Install zsh completion
+    output = Utils.popen_read("#{bin}/astartectl completion zsh")
+    (zsh_completion/"_astartectl").write output
+
+    prefix.install_metafiles
   end
 
   test do
