@@ -1,8 +1,8 @@
 class Astartectl < Formula
   desc "Astarte command-line client utility"
   homepage "https://astarte.cloud"
-  url "https://github.com/astarte-platform/astartectl/archive/v0.11.0-rc.1.tar.gz"
-  sha256 "bacb92c9c364edbe5ad6c6ff477022ccb0384714408a6f758b78773d896ff8ec"
+  url "https://github.com/astarte-platform/astartectl/archive/v0.11.0.tar.gz"
+  sha256 "974e003aa448619ff3a6fe42ff93cdf4f80d3a494c4b002b275c6f2085dfbaa0"
 
   depends_on "go" => :build
 
