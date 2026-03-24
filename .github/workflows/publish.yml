@@ -18,18 +18,20 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-      - name: Generate GitHub token
-        uses: actions/create-github-app-token@v2.2.1
-        id: github
-        with:
-          # GitHub App ID secret name
-          app-id: ${{ secrets.APP_ID }}
-          # GitHub App private key secret name
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      # TODO: needs apps
+      # - name: Generate GitHub token
+      #   uses: actions/create-github-app-token@v2.2.1
+      #   id: github
+      #   with:
+      #     # GitHub App ID secret name
+      #     app-id: ${{ secrets.APP_ID }}
+      #     # GitHub App private key secret name
+      #     private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
         with:
-          token: ${{ steps.github.outputs.token }}
+          # token: ${{ steps.github.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up git
         uses: Homebrew/actions/git-user-config@main
