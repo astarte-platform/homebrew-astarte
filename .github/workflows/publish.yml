@@ -1,0 +1,54 @@
+name: brew pr-pull
+
+on:
+  pull_request_target:
+    types:
+      - labeled
+
+jobs:
+  pr-pull:
+    if: contains(github.event.pull_request.labels.*.name, 'pr-pull')
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: read
+      checks: read
+      contents: write
+      issues: read
+      packages: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Generate GitHub token
+        uses: actions/create-github-app-token@v2.2.1
+        id: github
+        with:
+          # GitHub App ID secret name
+          app-id: ${{ secrets.APP_ID }}
+          # GitHub App private key secret name
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ steps.github.outputs.token }}
+
+      - name: Set up git
+        uses: Homebrew/actions/git-user-config@main
+
+      - name: Pull bottles
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ steps.github.outputs.token }}
+          HOMEBREW_GITHUB_PACKAGES_TOKEN: ${{ steps.github.outputs.token }}
+          HOMEBREW_GITHUB_PACKAGES_USER: ${{ github.repository_owner }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+        run: brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
+
+      - name: Push commits
+        uses: Homebrew/actions/git-try-push@main
+        with:
+          branch: master
+
+      - name: Delete branch
+        if: github.event.pull_request.head.repo.fork == false
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: git push --delete origin "$BRANCH"
