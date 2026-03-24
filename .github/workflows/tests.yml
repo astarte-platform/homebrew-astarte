@@ -21,7 +21,7 @@ jobs:
       id-token: write
     steps:
       - name: Generate GitHub token
-        uses: actions/create-github-app-token@v2.2.1
+        uses: actions/create-github-app-token@v3.0.0
         id: github
         with:
           # GitHub App ID secret name
